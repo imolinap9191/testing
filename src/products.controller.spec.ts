@@ -84,6 +84,36 @@ describe('ProductsController', () => {
       });
     expect(productsController.create(newProduct)).toEqual(newProduct);
   });
+
+  it('should not create product with negative stock', () => {
+    const productWithNegativeStock: Product =  {
+      id: '8',
+      nombre: 'Batería externa Anker PowerCore',
+      marca: 'Anker',
+      descripcion: 'Batería portátil de 20000mAh para cargar dispositivos móviles',
+      precio: 49.99,
+      stock: -22
+    };
+    jest.spyOn(productsService, 'create').mockImplementation((product: Product) => {
+      return product.stock >= 0 ? product : null;
+    });
+    expect(productsController.create(productWithNegativeStock)).toBeNull();
+  });
+  it('should not create product with negative price', () => {
+    const productWithNegativePrice: Product =  {
+      id: '9',
+      nombre: 'Teclado mecánico Corsair K70 RGB',
+      marca: 'Corsair',
+      descripcion: 'Teclado mecánico para juegos con retroiluminación RGB',
+      precio: -159.95,
+      stock: 20
+    };
+    jest.spyOn(productsService, 'create').mockImplementation((product: Product) => {
+      return product.precio >= 0 ? product : null;
+    });
+    expect(productsController.create(productWithNegativePrice)).toBeNull();
+  });
+  
   it('should update an existing product', () => {
     const updatedProduct: Product = {
       id: '7',
@@ -118,12 +148,5 @@ describe('ProductsController', () => {
     });
     expect(productsController.delete('7')).toEqual(deletedProduct);
     expect(productsController.delete('9')).toBeNull();
-  });
-  it('should be defined', () => {
-    expect(productsService.create).toBeDefined();
-    expect(productsService.delete).toBeDefined();
-    expect(productsService.findAll).toBeDefined();
-    expect(productsService.findById).toBeDefined();
-    expect(productsService.update).toBeDefined();
   });
 });

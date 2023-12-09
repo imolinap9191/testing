@@ -43,6 +43,33 @@ describe('ProductsController', () => {
       expect(createdProduct).toEqual(newProduct);
       expect(foundProduct).toEqual(newProduct);
     });
+
+    it('should not allow creation of product with negative stock', () => {
+      const productWithNegativeStock: Product = {
+        id: '8',
+        nombre: 'Batería externa Anker PowerCore',
+        marca: 'Anker',
+        descripcion: 'Batería portátil de 20000mAh para cargar dispositivos móviles',
+        precio: 49.99,
+        stock: -22,
+      };
+      const result = productsService.create(productWithNegativeStock);
+      expect(result).toBeNull();
+    });
+    it('should not allow creation of product with negative price', () => {
+      const productWithNegativePrice: Product = {
+        id: '9',
+        nombre: 'Teclado mecánico Corsair K70 RGB',
+        marca: 'Corsair',
+        descripcion: 'Teclado mecánico para juegos con retroiluminación RGB',
+        precio: -159.95,
+        stock: 20,
+      };
+      const result = productsService.create(productWithNegativePrice);
+      expect(result).toBeNull();
+    });
+  });
+
     it('should update an existing product', () => {
       const initialProduct: Product = {
         id: '1',
@@ -96,4 +123,4 @@ describe('ProductsController', () => {
       expect(deletedProduct).toBeFalsy();
     });
   });
-});
+

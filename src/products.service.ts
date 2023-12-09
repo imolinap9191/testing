@@ -11,7 +11,10 @@ export class ProductsService {
     return this.products.find((product) => product.id === id);
   }
   create(product: Product): Product {
-    this.products.push(product);
+    if (product.stock < 0 || product.precio < 0) {
+      return null;
+    }
+   this.products.push(product);
     return product;
   }
   update(id: string, updatedProduct: Product): Product {
