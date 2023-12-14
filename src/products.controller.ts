@@ -1,42 +1,47 @@
 import {
   Controller,
   Get,
-  HttpStatus,
   Post,
   Body,
   Param,
-  Res,
   Delete,
   Put,
-  NotFoundException,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
-import { Product } from './Iproducts';
+import { IProduct } from './Iproducts';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get()
-  findAll(): Product[] {
+//devuelve todos los productos existentes usando el metodo findAll del servicio
+  findAll(): IProduct[] {
     return this.productsService.findAll();
   }
 
   @Get(':id')
-  findById(@Param('id') id: string): Product {
+//devuelve los datos del producto que corresponde con el id proporcionado, utiliza el metodo findById del servicio
+  findById(@Param('id') id: string): IProduct {
     return this.productsService.findById(id);
   }
 
   @Post()
-  create(@Body() product: Product): Product {
+//crea un nuevo producto con la información que se pasa en el body 
+  create(@Body() product: IProduct): IProduct {
     return this.productsService.create(product);
   }
+
   @Put(':id')
-  update(@Param('id') id: string, @Body() updatedProducts: Product): Product {
+//se actualiza un producto existente basado en el ID que se pasa como parámetro mas 
+//la información que se proporciona en el body, usando el método update del servicio ProductsService
+  update(@Param('id') id: string, @Body() updatedProducts: IProduct): IProduct {
     return this.productsService.update(id, updatedProducts);
   }
+
   @Delete(':id')
-  delete(@Param(':id') id: string): Product {
+//elimina un producto específico de acuerdo al id  pasado como parametro, usando el método delete del servicio ProductsService
+  delete(@Param(':id') id: string): IProduct {
     return this.productsService.delete(id);
   }
 }
